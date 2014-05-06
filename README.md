@@ -45,7 +45,6 @@ VLC and lynx should be available in your standard repositories. You can install 
     sudo apt-get update
     sudo apt-get install yad
 
-
 ###Installation
 
 1. Grab the latest source tarball and extract it.
