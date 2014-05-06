@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# NAME:         reddit_streamer
+# VERSION:      0.1
+# AUTHOR:       (c) 2014 Glutanimate
+# DESCRIPTION:  Collects given number of top youtube links on a subreddit and passes them to a player
+#               of your choice (VLC by default)
+# DEPENDENCIES: lynx, yad, (vlc)
+#               You can grab the zenity fork yad from http://sourceforge.net/projects/yad-dialog/ or
+#               ppa:webupd8team/y-ppa-manager
+# LICENSE:      GNU GPLv3 (http://www.gnu.de/documents/gpl-3.0.en.html)
+#
+# NOTICE:       THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. 
+#               EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES 
+#               PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR 
+#               IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY 
+#               AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND 
+#               PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE,
+#               YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+#
+#               IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY 
+#               COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS THE PROGRAM AS 
+#               PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, 
+#               INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE 
+#               THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED 
+#               INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE 
+#               PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER OR OTHER 
+#               PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+############## USGCHECKS #################
+
+############### GLOBVAR ##################
+
+ICON=minitube
+TITLE="Reddit streamer"
+WMCLASS="RedditStreamer"
+
+PLAYER="vlc"
+DEFAULT_SUBREDDITS="^videos!youtubehaiku!music"
+DEFAULT_LIMIT="100"
+
+TXT_GUI_ENTRY="Please select the <b>subreddit</b> and the <b>number of videos</b> \
+you would like to stream:"
+
+############## FUNCTIONS #################
+
+gui_show_error(){
+    yad --title="$TITLE" \
+      --center --width="400" --height="100" \
+      --image=dialog-error \
+      --window-icon=dialog-error \
+      --class="$WMCLASS" \
+      --text="$1" \
+      --button="OK":0 2> /dev/null
+    echo "$1"
+}
+
+selectsubreddit () {
+    GUI_OPTIONS=$(yad \
+        --form \
+        --center --width 300 \
+        --class="$WMCLASS" --title "$TITLE" \
+        --image=$ICON \
+        --window-icon=$ICON \
+        --button="gtk-ok:0" --button="gtk-cancel:1" \
+        --field="$TXT_GUI_ENTRY":LBL "" \
+        --field="Subreddit:":CBE "$DEFAULT_SUBREDDITS" \
+        --field="Links":NUM $DEFAULT_LIMIT[!10..200[!1]]
+        )
+    RET=$?
+        
+    if [ "$RET" = 252 ] || [ "$RET" = 1 ]  # WM-Close or "Abort"
+      then
+          exit 1
+    fi
+    
+    SUBREDDIT="$(echo "$GUI_OPTIONS" | cut -d '|' -f2)"
+    LIMIT="$(echo "$GUI_OPTIONS" | cut -d '|' -f3 | cut -d ',' -f1)"
+    WEBSITE="http://www.reddit.com/r/$SUBREDDIT?limit=$LIMIT"
+    
+    if [[ -z "$SUBREDDIT" || -z "$LIMIT" ]]
+      then
+          gui_show_error "WARNING: Please make sure to fill out all fields."
+          selectsubreddit
+    fi
+
+    echo "Subreddit set to $SUBREDDIT."
+    echo "Limit set to $LIMIT."
+}
+
+playback () {
+    echo "Extracting links from $WEBSITE..."
+    PLAYLIST="$(lynx -cache=0 -dump -listonly "$WEBSITE" \
+     | grep -E 'youtube\.com\/|youtu\.be\/' \
+     | grep -v 'http\:\/\/www\.reddit\.com\/domain\/' \
+     | sed "s,youtu.be/,youtube.com/watch?v=,g" | awk '{print $2}')"
+    echo "Passing on to $PLAYER..."
+     "$PLAYER" $PLAYLIST > /dev/null 2>&1 &
+}
+
+################ MAIN ####################
+
+selectsubreddit
+playback > /dev/null 2>&1 &
