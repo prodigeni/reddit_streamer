@@ -62,4 +62,4 @@ Note: Some icon themes don't ship with the `minitube` icon by default. I have in
 This script uses VLC to stream youtube videos. If it suddenly stops working, chances are that youtube updated their service and broke VLC's parser scripts. If that's the case you can replace the scripts more recent revision by:
 
 1. Downloading the [latest VLC sources](https://www.videolan.org/vlc/download-sources.html) 
-2. Extract the contents of `./share/lua/playlist` to `.local/share/vlc/lua/playlist`.
+2. Extract the contents of `./share/lua/playlist` to `~/.local/share/vlc/lua/playlist`.
