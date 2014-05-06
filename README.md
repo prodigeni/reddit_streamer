@@ -80,7 +80,18 @@ Note: Some icon themes don't ship with the `minitube` icon by default. I have in
 
 ###Common issues
 
+**The script has suddenly stopped working**
+
 This script uses VLC to stream videos. If it suddenly stops working, chances are that a video hosting service updated their website and broke VLC's parser scripts. If that's the case you can replace the scripts with more recent revisions by:
 
 1. downloading the [latest VLC sources](https://www.videolan.org/vlc/download-sources.html) 
 2. extracting the contents of `./share/lua/playlist` to `~/.local/share/vlc/lua/playlist`.
+
+
+**The videos are constantly buffering**
+
+VLC will choose the highest resolution by default. You can change this in the settings menu: Go to *Tools* → *Preferences* and make sure *Show settings* set to *All*. Then click on *Input/Codecs* in the left treeview pane. Find the combobox entry that says *Preferred video resolution*, adjust it to your need and click *Save*.
+
+**Some videos are played in low resolution even though HD is available**
+
+In some cases VLC will only be able to extract SD streams. This mainly occurs with Vimeo.
