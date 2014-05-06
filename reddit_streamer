@@ -97,10 +97,10 @@ playback () {
      | sed 's/&list=.*$//g' `# remove playlist parameter`                                       \
      | awk '{print $2}')"
     echo "Passing on to $PLAYER..."
-     "$PLAYER" $PLAYLIST #> /dev/null 2>&1 &
+     "$PLAYER" $PLAYLIST > /dev/null 2>&1 &
 }
 
 ################ MAIN ####################
 
 selectsubreddit
-playback #> /dev/null 2>&1 &
+playback > /dev/null 2>&1 &
