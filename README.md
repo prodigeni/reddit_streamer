@@ -6,13 +6,24 @@
 ![image of main interface](https://raw.githubusercontent.com/Glutanimate/reddit_streamer/master/screenshot_reddit_streamer.png)
 
     # NAME:         reddit_streamer
-    # VERSION:      0.1
+    # VERSION:      0.3
     # AUTHOR:       (c) 2014 Glutanimate
-    # DESCRIPTION:  Collects given number of highest ranking youtube links on a subreddit and passes them
-    #               to a player of your choice (VLC by default)
+    # DESCRIPTION:  Collects given number of top video links on a subreddit and passes them to a player
+    #               of your choice (VLC by default)
+    #
+    # FEATURES:     - supports YouTube, Vimeo, Liveleak and Dailymotion
+    #
     # DEPENDENCIES: lynx, yad, (vlc)
     #               You can grab the zenity fork yad from http://sourceforge.net/projects/yad-dialog/ or
     #               ppa:webupd8team/y-ppa-manager
+    #
+    # CHANGES:      - 0.3 -- added support for vimeo.com, liveleak.com and dailymotion.com
+    #                     -- adjusted video link limit (100 is the maximum supported by reddit)
+    #                     -- youtu.be links aren't unshortened anymore (they are supported by recent
+    #                        revisions of the VLC youtube parser)
+    #               - 0.2 -- fixed bug where youtube playlists would be played fully
+    #               - 0.1 -- initial release
+    #
     # LICENSE:      GNU GPLv3 (http://www.gnu.de/documents/gpl-3.0.en.html)
     #
     # NOTICE:       THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. 
@@ -32,6 +43,16 @@
     #               PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER OR OTHER 
     #               PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
 
+###Changelog
+
+- 0.3 
+    - added **support for vimeo.com, liveleak.com and dailymotion.com**
+    - adjusted video link limit (100 is the maximum supported by reddit)
+    - youtu.be links aren't unshortened anymore (they are supported by recent revisions of the VLC youtube parser)
+- 0.2 
+    - fixed bug where youtube playlists would be played fully
+- 0.1 
+    - initial release
 
 ###Dependencies
 
@@ -59,7 +80,7 @@ Note: Some icon themes don't ship with the `minitube` icon by default. I have in
 
 ###Common issues
 
-This script uses VLC to stream youtube videos. If it suddenly stops working, chances are that youtube updated their service and broke VLC's parser scripts. If that's the case you can replace the scripts with a more recent revision by:
+This script uses VLC to stream videos. If it suddenly stops working, chances are that a video hosting service updated their website and broke VLC's parser scripts. If that's the case you can replace the scripts with more recent revisions by:
 
 1. downloading the [latest VLC sources](https://www.videolan.org/vlc/download-sources.html) 
 2. extracting the contents of `./share/lua/playlist` to `~/.local/share/vlc/lua/playlist`.
