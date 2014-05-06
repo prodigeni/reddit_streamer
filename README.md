@@ -3,7 +3,7 @@
 
 ###Overview
 
-![image of main interface]()
+![image of main interface](https://raw.githubusercontent.com/Glutanimate/reddit_streamer/master/screenshot_reddit_streamer.png)
 
     # NAME:         reddit_streamer
     # VERSION:      0.1
