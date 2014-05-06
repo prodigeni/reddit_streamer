@@ -104,7 +104,7 @@ playback () {
     PLAYLIST="$(lynx -cache=0 -dump -listonly "$WEBSITE"                                            \
      | grep -E \
      'youtube\.com\/|youtu\.be\/|vimeo\.com\/|liveleak\.com\/|dailymotion\.com\/' `# extract links` \
-     | grep -v 'http\:\/\/www\.reddit\.com\/domain\/' `# filter out redit domain links`             \
+     | grep -v 'http\:\/\/www\.reddit\.com\/domain\/' `# filter out reddit domain links`            \
      | sed 's/&list=.*$//g' `# remove playlist parameter`                                           \
      | sed "s,https://,http://,g" `# dirty workaround because of problems with https`               \
      | awk '{print $2}')"
