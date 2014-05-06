@@ -53,4 +53,6 @@ VLC and lynx should be available in your standard repositories. You can install 
 
 3. Copy `reddit_streamer.desktop` to `~/.local/share/applications` for single user installation or `/usr/local/share/applications` for multi user installation)
 
+Reddit Streamer should now appear in your launcher (e.g. Unity dash).
+
 Note: Some icon themes don't ship with the `minitube` icon by default. I have included the minitube icon found in the [Faenza iconset](http://tiheum.deviantart.com/art/Faenza-Icons-173323228) by tiheum in this repository (License: GNU GPL). If you see a placeholder icon instead of the proper one you can copy the Faenza icon to `~/.icons/hicolor/scalable/apps` and it should be recognized correctly.
