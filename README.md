@@ -90,7 +90,7 @@ This script uses VLC to stream videos. If it suddenly stops working, chances are
 
 **The videos are constantly buffering**
 
-VLC will choose the highest resolution by default. You can change this in the settings menu: Go to *Tools* → *Preferences* and make sure *Show settings* set to *All*. Then click on *Input/Codecs* in the left treeview pane. Find the combobox entry that says *Preferred video resolution*, adjust it to your need and click *Save*.
+VLC will choose the highest resolution by default. You can change this in the settings menu: Go to *Tools* → *Preferences* and make sure *Show settings* is set to *All*. Then click on *Input/Codecs* in the left treeview pane. Find the combobox entry that says *Preferred video resolution*, adjust it to your needs and click *Save*.
 
 **Some videos are played in low resolution even though HD is available**
 
