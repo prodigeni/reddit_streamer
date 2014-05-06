@@ -37,13 +37,13 @@
 
 VLC and lynx should be available in your standard repositories. You can install them with
 
-   sudo apt-get install vlc lynx
+    sudo apt-get install vlc lynx
    
 [YAD](http://sourceforge.net/projects/yad-dialog/) is an advanced fork of Zenity. Unfortunately it hasn't arrived in the Debian/Ubuntu repos yet but luckily enough the folks over at www.webupd8.com created a PPA for it. You can add the YAD PPA and install YAD with:
 
-   sudo add-apt-repository ppa:webupd8team/y-ppa-manager
-   sudo apt-get update
-   sudo apt-get install yad
+    sudo add-apt-repository ppa:webupd8team/y-ppa-manager
+    sudo apt-get update
+    sudo apt-get install yad
 
 ###Installation
 
