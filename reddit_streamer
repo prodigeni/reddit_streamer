@@ -90,15 +90,17 @@ selectsubreddit () {
 
 playback () {
     echo "Extracting links from $WEBSITE..."
-    PLAYLIST="$(lynx -cache=0 -dump -listonly "$WEBSITE" \
-     | grep -E 'youtube\.com\/|youtu\.be\/' \
-     | grep -v 'http\:\/\/www\.reddit\.com\/domain\/' \
-     | sed "s,youtu.be/,youtube.com/watch?v=,g" | awk '{print $2}')"
+    PLAYLIST="$(lynx -cache=0 -dump -listonly "$WEBSITE"                                        \
+     | grep -E 'youtube\.com\/|youtu\.be\/' `#extract standard and shortened links`             \
+     | grep -v 'http\:\/\/www\.reddit\.com\/domain\/' `#filter out redit domain links`          \
+     | sed "s,youtu.be/,youtube.com/watch?v=,g" `# convert shortened links to proper ones`      \
+     | sed 's/&list=.*$//g' `# remove playlist parameter`                                       \
+     | awk '{print $2}')"
     echo "Passing on to $PLAYER..."
-     "$PLAYER" $PLAYLIST > /dev/null 2>&1 &
+     "$PLAYER" $PLAYLIST #> /dev/null 2>&1 &
 }
 
 ################ MAIN ####################
 
 selectsubreddit
-playback > /dev/null 2>&1 &
+playback #> /dev/null 2>&1 &
