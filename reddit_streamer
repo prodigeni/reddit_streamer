@@ -3,16 +3,17 @@
 # NAME:         reddit_streamer
 # VERSION:      0.3
 # AUTHOR:       (c) 2014 Glutanimate
-# DESCRIPTION:  Collects given number of top video links on a subreddit and passes them to a player
-#               of your choice (VLC by default)
+# DESCRIPTION:  Collects defined number of top video links off a subreddit and passes them to a
+#               player of your choice (VLC by default)
 #
 # FEATURES:     - supports YouTube, Vimeo, Liveleak and Dailymotion
 #
-# DEPENDENCIES: lynx, yad, (vlc)
+# DEPENDENCIES: curl, yad, (vlc)
 #               You can grab the zenity fork yad from http://sourceforge.net/projects/yad-dialog/ or
 #               ppa:webupd8team/y-ppa-manager
 #
-# CHANGES:      - 0.3 -- added support for vimeo.com, liveleak.com and dailymotion.com
+# CHANGES:      - 0.4 -- replaced lynx with curl command-line
+#               - 0.3 -- added support for vimeo.com, liveleak.com and dailymotion.com
 #                     -- adjusted video link limit (100 is the maximum supported by reddit)
 #                     -- youtu.be links aren't unshortened anymore (they are supported by recent
 #                        revisions of the VLC youtube parser)
@@ -46,7 +47,7 @@ ICON=minitube
 TITLE="Reddit streamer"
 WMCLASS="RedditStreamer"
 
-PLAYER="vlc" # make sure your player supports all video services mentioned above
+PLAYER="vlc" # make sure your player supports all the video services mentioned above
 DEFAULT_SUBREDDITS="^videos!youtubehaiku!music" # default selection of subreddits, first item
 DEFAULT_LIMIT="100"                             # in list denoted by '^'
 
@@ -75,7 +76,7 @@ selectsubreddit () {
         --window-icon=$ICON \
         --button="gtk-ok:0" --button="gtk-cancel:1" \
         --field="$TXT_GUI_ENTRY":LBL "" \
-        --field="Subreddit:":CBE "$DEFAULT_SUBREDDITS" \
+        --field="Subreddit":CBE "$DEFAULT_SUBREDDITS" \
         --field="Links":NUM $DEFAULT_LIMIT[!10..100[!1]]
         )
     RET=$?
@@ -101,13 +102,15 @@ selectsubreddit () {
 
 playback () {
     echo "Extracting links from $WEBSITE..."
-    PLAYLIST="$(lynx -cache=0 -dump -listonly "$WEBSITE"                                            \
-     | grep -E \
-     'youtube\.com\/|youtu\.be\/|vimeo\.com\/|liveleak\.com\/|dailymotion\.com\/' `# extract links` \
-     | grep -v 'http\:\/\/www\.reddit\.com\/domain\/' `# filter out reddit domain links`            \
-     | sed 's/&list=.*$//g' `# remove playlist parameter`                                           \
-     | sed "s,https://,http://,g" `# dirty workaround because of problems with https`               \
-     | awk '{print $2}')"
+    # URL parsing based on : http://stackoverflow.com/a/5369363/1708932
+    # Old version: lynx -cache=0 -dump -listonly "$WEBSITE"  
+    PLAYLIST="$(curl "$WEBSITE" 2>&1 | grep -o -E 'href="([^"#]+)"' | cut -d'"' -f2 | uniq            \
+     | grep -E                                                                                        \
+      'youtube\.com\/|youtu\.be\/|vimeo\.com\/|liveleak\.com\/|dailymotion\.com\/' `# extract videos` \
+     | grep -v '\/domain\/'  `# filter out reddit domain links`                                       \
+     | sed 's/&list=.*$//g' `# remove playlist parameter`                                             \
+     | sed "s,https://,http://,g" `# dirty workaround because of problems with https`                 \
+    )"
     echo "Passing on to $PLAYER..."
      "$PLAYER" $PLAYLIST > /dev/null 2>&1 &
 }

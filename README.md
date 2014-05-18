@@ -8,16 +8,17 @@
     # NAME:         reddit_streamer
     # VERSION:      0.3
     # AUTHOR:       (c) 2014 Glutanimate
-    # DESCRIPTION:  Collects given number of top video links on a subreddit and passes them to a player
-    #               of your choice (VLC by default)
+    # DESCRIPTION:  Collects defined number of top video links off a subreddit and passes them to a
+    #               player of your choice (VLC by default)
     #
     # FEATURES:     - supports YouTube, Vimeo, Liveleak and Dailymotion
     #
-    # DEPENDENCIES: lynx, yad, (vlc)
+    # DEPENDENCIES: curl, yad, (vlc)
     #               You can grab the zenity fork yad from http://sourceforge.net/projects/yad-dialog/ or
     #               ppa:webupd8team/y-ppa-manager
     #
-    # CHANGES:      - 0.3 -- added support for vimeo.com, liveleak.com and dailymotion.com
+    # CHANGES:      - 0.4 -- replaced lynx with curl command-line
+    #               - 0.3 -- added support for vimeo.com, liveleak.com and dailymotion.com
     #                     -- adjusted video link limit (100 is the maximum supported by reddit)
     #                     -- youtu.be links aren't unshortened anymore (they are supported by recent
     #                        revisions of the VLC youtube parser)
@@ -45,6 +46,8 @@
 
 ###Changelog
 
+- 0.4
+    - replaced lynx with a curl command-line
 - 0.3 
     - added **support for vimeo.com, liveleak.com and dailymotion.com**
     - adjusted video link limit (100 is the maximum supported by reddit)
@@ -56,9 +59,9 @@
 
 ###Dependencies
 
-VLC and lynx should be available in your standard repositories. You can install them with
+VLC and curl should be available in your standard repositories. You can install them with
 
-    sudo apt-get install vlc lynx
+    sudo apt-get install vlc curl
    
 [YAD](http://sourceforge.net/projects/yad-dialog/) is an advanced fork of Zenity. Unfortunately it hasn't arrived in the Debian/Ubuntu repos yet but luckily enough the folks over at www.webupd8.com created a PPA for it. You can add the YAD PPA and install YAD with:
 
